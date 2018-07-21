@@ -1,15 +1,15 @@
 cart_hash = {}
 
-loop {
-  puts "Введите название товара:"
+loop do
+  puts 'Введите название товара:'
   item_name = gets.chomp
-  break if item_name == "стоп"
-  puts "Введите цену за единицу товара:"
+  break if item_name == 'стоп'
+  puts 'Введите цену за единицу товара:'
   price = gets.to_f
-  puts "Введите количество товара:"
+  puts 'Введите количество товара:'
   quantity = gets.to_f
   cart_hash[item_name] = { price: price, quantity: quantity }
-}
+end
 
 puts "\n" + cart_hash.inspect + "\n"
 
