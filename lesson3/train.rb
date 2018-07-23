@@ -22,11 +22,13 @@ class Train
   end
 
   def add_coach
-    self.coaches_num = coaches_num + 1 if speed.zero?
+    return unless speed.zero?
+    self.coaches_num = coaches_num + 1
   end
 
   def remove_coach
-    self.coaches_num = coaches_num - 1 if speed.zero?
+    return unless speed.zero? || !coaches_num.zero?
+    self.coaches_num = coaches_num - 1
   end
 
   def leave_station(station)
