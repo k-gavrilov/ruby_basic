@@ -4,7 +4,7 @@ require './station.rb'
 class Train
   TYPE = %i[passenger cargo].freeze
 
-  attr_reader :id, :type, :speed, :coaches_num, :current_station
+  attr_reader :id, :type, :speed, :coaches_num
 
   def initialize(id, type, coaches_num)
     @id = id
@@ -40,32 +40,36 @@ class Train
   end
 
   def route=(route)
-    leave_station(current_station) if current_station
+    leave_station(route.full_list[route_index]) if route_index
     @route = route
-    self.current_station = route.full_list.first
-    arrive_to_station(current_station)
+    @route_index = 0
+    arrive_to_station(route.full_list[route_index])
   end
 
   def move_forward
-    return unless route && current_station != route.full_list.last
-    leave_station(current_station)
-    current_station = next_station
-    arrive_to_station(current_station)
+    return unless route && route.full_list.at(route_index)
+    leave_station(route.full_list[route_index])
+    self.route_index = route_index + 1
+    arrive_to_station(route.full_list[route_index])
   end
 
   def move_backword
-    return unless route && current_station != route.full_list.first
-    leave_station(current_station)
-    current_station = previous_station
-    arrive_to_station(current_station)
+    return unless route && !route_index.zero?
+    leave_station(route.full_list[route_index])
+    self.route_index = route_index - 1
+    arrive_to_station(route.full_list[route_index])
+  end
+
+  def current_station
+    route_index
   end
 
   def next_station
-    route.full_list[route.full_list.find_index(current_station) + 1]
+    route.full_list[route_index + 1] if route.full_list.at(route_index + 1)
   end
 
   def previous_station
-    route.full_list[route.full_list.find_index(current_station) - 1]
+    route.full_list[route_index] unless route_index.zero?
   end
 
   def to_s
@@ -75,5 +79,6 @@ class Train
   private
 
   attr_reader :route
-  attr_writer :speed, :coaches_num, :current_station
+  attr_writer :speed, :coaches_num
+  attr_accessor :route_index
 end
