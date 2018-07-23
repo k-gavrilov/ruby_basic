@@ -16,16 +16,9 @@ class Station
     train_list.delete(train)
   end
 
-  def train_type_list
-    train_type_list = {}
-    train_list.each do |train|
-      if train_type_list.key?(train.type)
-        train_type_list[train.type] += 1
-      else
-        train_type_list[train.type] = 1
-      end
-    end
-    train_type_list
+  def train_type_list(type)
+    filtered_list = train_list.select { |train| train.type == type }
+    filtered_list.size
   end
 
   def to_s
