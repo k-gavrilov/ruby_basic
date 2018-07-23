@@ -27,13 +27,16 @@ puts 'Маршрут 2:'
 puts route2.full_list
 puts
 # removing stations from route
+puts 'Удаляем станцию Мартышкино'
 route2.remove_station(mar)
 puts 'Маршрут 2:'
 puts route2.full_list
 puts
 
 # test create train
+puts 'Создаем поезд ласточка 777 Пассажирский 12 вагонов:'
 lastochka = Train.new('777', Train::TYPE[0], 12)
+puts lastochka
 # test assignin route
 lastochka.route = route1
 puts
@@ -41,19 +44,24 @@ puts
 old_fashioned_train = Train.new('001', Train::TYPE[1], 55)
 old_fashioned_train.route = route2
 
+puts 'Создаем поезд Ласточка2 778 Пассажирский 20 вагонов:'
+lastochka2 = Train.new('778', Train::TYPE[0], 20)
+puts lastochka2
+lastochka2.route = route1
 
 puts
 puts 'Поезда на станции Новый Петергоф'
 # test train_list and aggregated train_list
 puts petergof1.train_list
-puts petergof1.train_type_list
+puts 'Кол-во пассажирских поездов на станции Новый Петергоф:'
+puts petergof1.train_type_list(Train::TYPE[0])
 
 # test moving forward
 lastochka.move_forward
 # Test current/previous/next stations
-puts "Текущая для второго поезды #{old_fashioned_train.current_station}"
+puts "Текущая ст. для второго поезда #{old_fashioned_train.current_station}"
 puts "Следующая для второго поезда #{old_fashioned_train.next_station}"
-puts "Предыдущая для второго поезды #{old_fashioned_train.previous_station}"
+puts "Предыдущая для второго поезда #{old_fashioned_train.previous_station}"
 # test moving backword
 lastochka.move_backword
 puts 'Поезда на станции Новый Петергоф'
