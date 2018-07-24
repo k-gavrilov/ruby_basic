@@ -4,12 +4,12 @@ require './station.rb'
 class Train
   TYPE = %i[passenger cargo].freeze
 
-  attr_reader :id, :type, :speed, :coaches_num
+  attr_reader :id, :type, :speed
 
-  def initialize(id, type, coaches_num)
+  def initialize(id, type)
     @id = id
     @type = type
-    @coaches_num = coaches_num
+    @coaches_list = []
     @speed = 0
   end
 
@@ -21,14 +21,14 @@ class Train
     self.speed = 0
   end
 
-  def add_coach
+  def add_coach(coach)
     return unless speed.zero?
-    self.coaches_num = coaches_num + 1
+    coaches_list << coach
   end
 
   def remove_coach
-    return unless speed.zero? || !coaches_num.zero?
-    self.coaches_num = coaches_num - 1
+    return unless speed.zero?
+    coaches_list.pop
   end
 
   def leave_station(station)
@@ -73,12 +73,13 @@ class Train
   end
 
   def to_s
-    "ID:#{id} Тип:#{type} Кол-во вагонов:#{coaches_num}"
+    "ID:#{id} Тип:#{type} Кол-во вагонов:#{coaches_list.size}"
   end
 
   private
-
-  attr_reader :route
-  attr_writer :speed, :coaches_num
+  # в private, т.к. методы используются только внутри класса, в наследниках
+  # переопределять не собираемся (относится ко всем методам в секции private)
+  attr_reader :route:, :coaches_list
+  attr_writer :speed
   attr_accessor :route_index
 end
