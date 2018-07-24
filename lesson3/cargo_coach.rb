@@ -1,0 +1,3 @@
+class CargoCoach << Coach
+
+end
