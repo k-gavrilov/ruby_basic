@@ -2,13 +2,11 @@ require './route.rb'
 require './station.rb'
 
 class Train
-  TYPE = %i[passenger cargo].freeze
 
-  attr_reader :id, :type, :speed
+  attr_reader :id, :speed
 
-  def initialize(id, type)
+  def initialize(id)
     @id = id
-    @type = type
     @coaches_list = []
     @speed = 0
   end
@@ -72,14 +70,24 @@ class Train
     route.full_list[route_index] unless route_index.zero?
   end
 
+  def coaches_num
+    coaches_list.size
+  end
+
   def to_s
-    "ID:#{id} Тип:#{type} Кол-во вагонов:#{coaches_list.size}"
+    "ID:#{id} Тип:#{type} Кол-во вагонов:#{coaches_num}"
+  end
+
+  protected
+  # Не является частью интерфейса класса, но требуется переопределять
+  def type
+    'Поезд'
   end
 
   private
   # в private, т.к. методы используются только внутри класса, в наследниках
   # переопределять не собираемся (относится ко всем методам в секции private)
-  attr_reader :route:, :coaches_list
+  attr_reader :route, :coaches_list
   attr_writer :speed
   attr_accessor :route_index
 end

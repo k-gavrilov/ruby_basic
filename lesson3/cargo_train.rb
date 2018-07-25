@@ -3,4 +3,10 @@ class CargoTrain < Train
     return unless coach.instance_of? CargoCoach
     super(coach)
   end
+
+  protected
+
+  def type
+    'Грузовой'
+  end
 end

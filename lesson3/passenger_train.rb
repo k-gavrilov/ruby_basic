@@ -3,4 +3,10 @@ class PassengerTrain < Train
     return unless coach.instance_of? PassengerCoach
     super(coach)
   end
+
+  protected
+
+  def type
+    'Пассажирский'
+  end
 end

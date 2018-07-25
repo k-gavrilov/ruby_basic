@@ -17,7 +17,7 @@ class Station
   end
 
   def train_type_list(type)
-    filtered_list = train_list.select { |train| train.type == type }
+    filtered_list = train_list.select { |train| train.instance_of? type }
     filtered_list.size
   end
 
