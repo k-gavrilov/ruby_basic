@@ -18,6 +18,12 @@ def seed
   railway_system.create_station(Station.new('Мартышкино'))
   railway_system.create_station(Station.new('Ломоносов'))
   railway_system.create_station(Station.new('Сосновый Бор'))
+  railway_system.create_train(PassengerTrain.new('Lastochka777'))
+  railway_system.create_train(PassengerTrain.new('Lastochka778'))
+  railway_system.create_train(CargoTrain.new('Tutu001'))
+  railway_system.create_route(Route.new(railway_system.fetch_station(0),
+                                        railway_system.fetch_station(5)))
+  railway_system.fetch_route(0).add_station(railway_system.fetch_station(3))
 
   # test create route
   # route1 = Route.new(petergof1, lomonosov)

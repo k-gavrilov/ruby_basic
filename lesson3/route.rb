@@ -17,6 +17,10 @@ class Route
     [first_station] + transition_station_list << last_station
   end
 
+  def to_s
+    full_list.join(" - ")
+  end
+
   private
 
   attr_reader :transition_station_list, :first_station, :last_station
