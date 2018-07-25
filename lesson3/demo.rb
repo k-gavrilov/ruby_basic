@@ -9,7 +9,8 @@ require_relative 'cargo_coach.rb'
 require_relative 'railway_system.rb'
 
 
-def seed(railway_system)
+def seed
+  railway_system = RailwaySystem.new
   # test create stations
   railway_system.create_station(Station.new('Новый Петергоф'))
   railway_system.create_station(Station.new('Старый Петергоф'))
@@ -41,9 +42,5 @@ def seed(railway_system)
   # lastochka2 = PassengerTrain.new('778')
   # 12.times { lastochka2.add_coach(PassengerCoach.new) }
   # lastochka2.route = route1
+  railway_system
 end
-
-railw = RailwaySystem.new
-seed(railw)
-railw.create_station(Station.new('Test Station'))
-puts railw.stations_list_str
