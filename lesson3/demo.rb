@@ -9,15 +9,14 @@ require_relative 'cargo_coach.rb'
 require_relative 'railway_system.rb'
 
 
-def seed(system)
-  system = RailwaySystem.new
+def seed(railway_system)
   # test create stations
-  system.create_station(Station.new('Новый Петергоф'))
-  system.create_station(Station.new('Старый Петергоф'))
-  system.create_station(Station.new('Университет'))
-  system.create_station(Station.new('Мартышкино'))
-  system.create_station(Station.new('Ломоносов'))
-  system.create_station(Station.new('Сосновый Бор'))
+  railway_system.create_station(Station.new('Новый Петергоф'))
+  railway_system.create_station(Station.new('Старый Петергоф'))
+  railway_system.create_station(Station.new('Университет'))
+  railway_system.create_station(Station.new('Мартышкино'))
+  railway_system.create_station(Station.new('Ломоносов'))
+  railway_system.create_station(Station.new('Сосновый Бор'))
 
   # test create route
   # route1 = Route.new(petergof1, lomonosov)
@@ -46,4 +45,5 @@ end
 
 railw = RailwaySystem.new
 seed(railw)
+railw.create_station(Station.new('Test Station'))
 puts railw.stations_list_str

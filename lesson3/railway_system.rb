@@ -15,9 +15,8 @@ class RailwaySystem
   end
 
   def stations_list_str
-    res_str = ""
-    stations_list.reduce(res_str) do |res_str, station|
-      res_str + "#{stations_list.find_index(station)}: #{station}"
+    stations_list.reduce("") do |res_str, station|
+      res_str + "#{stations_list.find_index(station)}: #{station}\n"
     end
   end
 
