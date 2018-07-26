@@ -40,6 +40,11 @@ class RailwaySystem
     end
   end
 
+  def list_size(class_name)
+    list = identify_list_by_class(class_name)
+    list.size
+  end
+
   private
 
   def identify_list_by_class(class_identifier)
