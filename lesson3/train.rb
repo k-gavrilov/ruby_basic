@@ -51,7 +51,7 @@ class Train
     arrive_to_station(route.full_list[route_index])
   end
 
-  def move_backword
+  def move_backward
     return unless route && !route_index.zero?
     leave_station(route.full_list[route_index])
     self.route_index = route_index - 1
@@ -79,14 +79,14 @@ class Train
   end
 
   protected
-  # Не является частью интерфейса класса, но требуется переопределять
+  # Isn't going to be a part of class interface
   def type
     'Поезд'
   end
 
   private
-  # в private, т.к. методы используются только внутри класса, в наследниках
-  # переопределять не собираемся (относится ко всем методам в секции private)
+  # private these are only used inside the class, not to be overriden in
+  # children
   attr_reader :route, :coaches_list
   attr_writer :speed
   attr_accessor :route_index

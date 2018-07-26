@@ -18,7 +18,7 @@ class Route
   end
 
   def to_s
-    full_list.join(" - ")
+    full_list.join(' - ')
   end
 
   private

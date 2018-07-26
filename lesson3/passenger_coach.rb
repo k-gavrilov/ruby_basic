@@ -1,3 +1,2 @@
 class PassengerCoach < Coach
-
 end

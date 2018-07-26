@@ -1,3 +1,2 @@
 class CargoCoach < Coach
-
 end
