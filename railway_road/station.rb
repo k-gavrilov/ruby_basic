@@ -1,11 +1,22 @@
-require './train.rb'
+require_relative 'train.rb'
+require_relative 'instance_counter.rb'
 
 class Station
+  include InstanceCounter
+
+  @@instances = []
+
   attr_reader :train_list
+
+  def self.all
+    @@instances
+  end
 
   def initialize(name)
     @name = name
     @train_list = []
+    @@instances << self
+    register_instance
   end
 
   def accept_train(train)

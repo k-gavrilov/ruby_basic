@@ -1,14 +1,26 @@
-require './route.rb'
-require './station.rb'
+require_relative 'route.rb'
+require_relative 'station.rb'
+require_relative 'labelable.rb'
+require_relative 'instance_counter.rb'
 
 class Train
+  include InstanceCounter
+  include Labelable
 
   attr_reader :id, :speed
+
+  @@instances = []
+
+  def self.find(id)
+    @@instances.find { |train| train.id == id }
+  end
 
   def initialize(id)
     @id = id
     @coaches_list = []
     @speed = 0
+    @@instances << self
+    register_instance
   end
 
   def raise_speed
