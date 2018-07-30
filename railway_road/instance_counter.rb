@@ -19,7 +19,7 @@ module InstanceCounter
     protected
 
     def register_instance
-      self.class.instances = self.class.instances + 1
+      self.class.instances += 1
     end
   end
 
