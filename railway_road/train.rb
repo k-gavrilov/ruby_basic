@@ -9,17 +9,17 @@ class Train
 
   attr_reader :id, :speed
 
-  @@instances = {}
+  @@trains = {}
 
   def self.find(id)
-    @@instances[id]
+    @@trains[id]
   end
 
   def initialize(id)
     @id = id
     @coaches_list = []
     @speed = 0
-    @@instances[id] = self
+    @@trains[id] = self
     register_instance
   end
 
