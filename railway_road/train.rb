@@ -9,6 +9,8 @@ class Train
 
   attr_reader :id, :speed
 
+  ID = /^[a-zа-я0-9]{3}-{0,1}[a-zа-я0-9]{2}$/i
+
   @@trains = {}
 
   def self.find(id)
@@ -19,6 +21,7 @@ class Train
     @id = id
     @coaches_list = []
     @speed = 0
+    validate!
     @@trains[id] = self
     register_instance
   end
@@ -86,19 +89,30 @@ class Train
     coaches_list.size
   end
 
+  def valid?
+    validate!
+  rescue RuntimeError
+    false
+  end
+
   def to_s
     "ID:#{id} Тип:#{type} Кол-во вагонов:#{coaches_num}"
   end
 
   protected
-  # Isn't going to be a part of class interface
+
+  def validate!
+    raise "Train ID shouldn't be nil" if id.nil?
+    raise 'Invalid train ID' unless id =~ ID
+    true
+  end
+
   def type
     'Поезд'
   end
 
   private
-  # private these are only used inside the class, not to be overriden in
-  # children
+
   attr_reader :route, :coaches_list
   attr_writer :speed
   attr_accessor :route_index

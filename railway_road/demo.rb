@@ -11,15 +11,20 @@ require_relative 'instance_counter.rb'
 require_relative 'labelable.rb'
 
 # test Labelable
-lastochka1 = PassengerTrain.new('Lastochka1')
-lastochka2 = PassengerTrain.new('Lastochka2')
-tutu = CargoTrain.new('Tutu1')
-puts Train.find('Lastochka2')
-puts Train.find('Tutu1')
+lastochka1 = PassengerTrain.new('Las-01')
+lastochka2 = PassengerTrain.new('Лас01')
+tutu = CargoTrain.new('Tut-tu')
+puts Train.find('Las-01')
+puts Train.find('Tut-tu')
+puts lastochka1.valid?
 puts
+
 # test .all
 st1 = Station.new('Новый Петергоф')
 st2 = Station.new('Старый Петергоф')
+st3 = Station.new('Мартышкино')
+route = Route.new(st1, st2)
+route2 = Route.new(nil, st3)
 puts 'Все станции:'
 puts Station.all
 puts

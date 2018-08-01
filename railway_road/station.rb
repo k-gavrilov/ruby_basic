@@ -4,6 +4,8 @@ require_relative 'instance_counter.rb'
 class Station
   include InstanceCounter
 
+  NAME = /\S+/
+
   @@stations = []
 
   attr_reader :train_list
@@ -15,6 +17,7 @@ class Station
   def initialize(name)
     @name = name
     @train_list = []
+    validate!
     @@stations << self
     register_instance
   end
@@ -34,6 +37,19 @@ class Station
 
   def to_s
     name
+  end
+
+  def valid?
+    validate!
+  rescue RuntimeError
+    false
+  end
+
+  protected
+
+  def validate!
+    raise 'Invalid station name' unless name =~ NAME
+    true
   end
 
   private

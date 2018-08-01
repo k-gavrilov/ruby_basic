@@ -6,15 +6,18 @@ class Route
   def initialize(first_station, last_station)
     @first_station = first_station
     @last_station = last_station
+    validate!
     @transition_station_list = []
     register_instance
   end
 
   def add_station(station)
+    validate_station!(station)
     transition_station_list << station
   end
 
   def remove_station(station)
+    validate_station!(station)
     transition_station_list.delete(station)
   end
 
@@ -24,6 +27,25 @@ class Route
 
   def to_s
     full_list.join(' - ')
+  end
+
+  def valid?
+    validate!
+  rescue RuntimeError
+    false
+  end
+
+  protected
+
+  def validate!
+    validate_station!(first_station)
+    validate_station!(last_station)
+    true
+  end
+
+  def validate_station!(station)
+    raise "Station can't be nil" if station.nil?
+    true
   end
 
   private

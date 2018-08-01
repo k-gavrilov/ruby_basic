@@ -15,6 +15,7 @@ class RailwaySystem
   def create_train(train_id, train_type_index)
     train = TRAIN_TYPES.at(train_type_index).new(train_id)
     trains_list << train
+    "Успешно создан поезд #{train}"
   end
 
   def create_route(first_station_index, second_station_index)

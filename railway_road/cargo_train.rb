@@ -1,10 +1,15 @@
 class CargoTrain < Train
   def add_coach(coach)
-    return unless coach.instance_of? CargoCoach
+    validate_coach!
     super(coach)
   end
 
   protected
+
+  def validate_coach!(coach)
+    raise "coach_can't be nil" if coach.nil?
+    raise 'coach type error' unless coach.instance_of? CargoCoach
+  end
 
   def type
     'Грузовой'

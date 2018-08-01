@@ -11,85 +11,89 @@ require_relative 'railway_system.rb'
 
 class UserMenu
 
+  INVALID_TRAIN_ID_MSG = 'Введите корректный идентификатор поезда. ' \
+         'Идентификатор может состоять из двух блоков символов(3 и 2), ' \
+         'которые опционально могут быть соединены дефисом. ' \
+         'В качестве символов могут выступать буквы русского и ' \
+         'английского алфавита и цифры. ' \
+         'Пример: las-02'.freeze
+
   def initialize(railway_road)
     @railway_road = railway_road
   end
 
   def create_route
-    puts 'Выберите начальную станцию маршрута:'
+    message = 'Выберите начальную станцию маршрута:'
     stations_str_list = railway_road.stations_str_list
-    station1 = choose_option(stations_str_list)
-    return if station1.nil?
-    puts 'Выберите конечную станцию маршрута'
-    station2 = choose_option(stations_str_list)
-    return if station2.nil?
+    station1 = choose_option(message, stations_str_list)
+    message = 'Выберите конечную станцию маршрута'
+    station2 = choose_option(message, stations_str_list)
     railway_road.create_route(station1, station2)
   end
 
   def remove_station_in_route
-    puts 'Выберите маршрут'
+    message = 'Выберите маршрут'
     routes_str_list = railway_road.routes_str_list
-    route = choose_option(routes_str_list)
-    return if route.nil?
-    puts 'Выберите станцию для удаления'
+    route = choose_option(message, routes_str_list)
+    message = 'Выберите станцию для удаления'
     stations_str_list = railway_road.show_stations_to_remove(route)
     if stations_str_list.nil?
       puts 'Ошибка, нет промежуточных станций'
       return
     end
-    station = choose_option(stations_str_list)
-    return if station.nil?
+    station = choose_option(message, stations_str_list)
     railway_road.remove_station_from_route(route, station)
   end
 
   def add_station
-    puts 'Выберите маршрут'
+    message = 'Выберите маршрут'
     routes_str_list = railway_road.routes_str_list
-    route = choose_option(routes_str_list)
-    return if route.nil?
-    puts 'Выберите станцию:'
+    route = choose_option(message, routes_str_list)
+    message = 'Выберите станцию:'
     stations_str_list = railway_road.stations_str_list
-    station = choose_option(stations_str_list)
-    return if station.nil?
+    station = choose_option(message, stations_str_list)
     railway_road.add_station_to_route(route, station)
   end
 
   def create_train
-    puts 'Введите номер поезда:'
-    train_id = gets.chomp
-    return unless train_id
-    puts 'Выберите тип поезда'
+    message = 'Выберите тип поезда'
     train_types_str_list = railway_road.train_types_str_list
-    train_type = choose_option(train_types_str_list)
-    return if train_type.nil?
-    railway_road.create_train(train_id, train_type)
+    train_type = choose_option(message, train_types_str_list)
+    begin
+      puts 'Введите номер поезда:'
+      train_id = gets.chomp
+      puts railway_road.create_train(train_id, train_type)
+    rescue RuntimeError => e
+      if e.message == 'Invalid train ID'
+        puts INVALID_TRAIN_ID_MSG
+        retry
+      else
+        raise e
+      end
+    end
   end
 
   def assign_route
-    puts 'Выберите поезд:'
+    message = 'Выберите поезд:'
     trains_str_list = railway_road.trains_str_list
-    train = choose_option(trains_str_list)
-    return if train.nil?
-    puts 'Выберите маршрут:'
+    train = choose_option(message, trains_str_list)
+    message = 'Выберите маршрут:'
     routes_str_list = railway_road.routes_str_list
-    route = choose_option(routes_str_list)
-    return if route.nil?
+    route = choose_option(message, routes_str_list)
     railway_road.assign_route_to_train(train, route)
   end
 
   def add_coach
-    puts 'Выберите поезд:'
+    message = 'Выберите поезд:'
     trains_str_list = railway_road.trains_str_list
-    train = choose_option(trains_str_list)
-    return if train.nil?
+    train = choose_option(message, trains_str_list)
     railway_road.add_coach_to_train(train)
   end
 
   def remove_coach
-    puts 'Выберите поезд:'
+    message = 'Выберите поезд:'
     trains_str_list = railway_road.trains_str_list
-    train = choose_option(trains_str_list)
-    return if train.nil?
+    train = choose_option(message, trains_str_list)
     railway_road.remove_coach_from_train(train)
   end
 
@@ -105,10 +109,9 @@ class UserMenu
   end
 
   def show_trains_on_station
-    puts 'Выберите станцию:'
+    message = 'Выберите станцию:'
     stations_str_list = railway_road.stations_str_list
-    station = choose_option(stations_str_list)
-    return if station.nil?
+    station = choose_option(message, stations_str_list)
     puts railway_road.show_trains_on_station(station)
   end
 
@@ -121,7 +124,7 @@ class UserMenu
       puts '3: Выберите этот пункт для возвregister_instanceрата в главное меню'
       puts '4: Выберите этот пункт для выхода'
       choice = gets.to_i
-      unless choice.between?(0,4)
+      unless choice.between?(0, 4)
         puts 'Некорректный ввод, введите целое число от 0 до 4 включительно'
         next
       end
@@ -183,7 +186,7 @@ class UserMenu
       puts '3: Выберите этот пункт для возврата в главное меню'
       puts '4: Выберите этот пункт для выхода'
       choice = gets.to_i
-      unless choice.between?(0,4)
+      unless choice.between?(0, 4)
         puts 'Некорректный ввод, введите целое число от 0 до 4 включительно'
         next
       end
@@ -231,12 +234,15 @@ class UserMenu
 
   private
 
-  def choose_option(string_arr)
-    threshold = string_arr.size - 1
-    puts string_arr
-    choice = gets.to_i
-    return unless choice.between?(0, threshold)
-    choice
+  def choose_option(message, string_arr)
+    loop do
+      puts message
+      threshold = string_arr.size - 1
+      puts string_arr
+      choice = gets.to_i
+      return choice if choice.between?(0, threshold)
+      puts 'Значение должно быть из предложенных вариантов!'
+    end
   end
 
   attr_accessor :railway_road
