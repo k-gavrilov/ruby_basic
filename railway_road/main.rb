@@ -7,7 +7,6 @@ require_relative 'coach.rb'
 require_relative 'passenger_coach.rb'
 require_relative 'cargo_coach.rb'
 require_relative 'railway_system.rb'
-require 'active_support/core_ext/string'
 
 # require_relative 'demo.rb'
 

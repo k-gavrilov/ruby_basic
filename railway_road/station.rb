@@ -8,6 +8,8 @@ class Station
 
   attr_reader :train_list
 
+  STATION = /\S+/
+
   def self.all
     @@stations
   end
@@ -46,7 +48,8 @@ class Station
   protected
 
   def validate!
-    raise 'Invalid station name' unless name.present?
+    raise 'Station name should be string' unless name.instance_of? String
+    raise 'Invalid station name' unless name =~ STATION
     true
   end
 
