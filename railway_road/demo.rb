@@ -9,6 +9,7 @@ require_relative 'cargo_coach.rb'
 require_relative 'railway_system.rb'
 require_relative 'instance_counter.rb'
 require_relative 'labelable.rb'
+require 'active_support/core_ext/string'
 
 # test Labelable
 lastochka1 = PassengerTrain.new('Las-01')
@@ -24,7 +25,7 @@ st1 = Station.new('Новый Петергоф')
 st2 = Station.new('Старый Петергоф')
 st3 = Station.new('Мартышкино')
 route = Route.new(st1, st2)
-route2 = Route.new(nil, st3)
+# route2 = Route.new(nil, st3)
 puts 'Все станции:'
 puts Station.all
 puts

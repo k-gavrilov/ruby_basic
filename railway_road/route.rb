@@ -43,7 +43,7 @@ class Route
   end
 
   def validate_station!(station)
-    raise "The item isn't of type Station" if station.instance_of? Station
+    raise "The item isn't of type Station" unless station.instance_of? Station
     true
   end
 
