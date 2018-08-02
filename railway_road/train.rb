@@ -102,7 +102,7 @@ class Train
   protected
 
   def validate!
-    raise "Train ID shouldn't be nil" if id.nil?
+    raise 'Invalid ID format' unless id.instance_of? String
     raise 'Invalid train ID' unless id =~ ID
     true
   end

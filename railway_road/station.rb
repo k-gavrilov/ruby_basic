@@ -4,8 +4,6 @@ require_relative 'instance_counter.rb'
 class Station
   include InstanceCounter
 
-  NAME = /\S+/
-
   @@stations = []
 
   attr_reader :train_list
@@ -48,7 +46,7 @@ class Station
   protected
 
   def validate!
-    raise 'Invalid station name' unless name =~ NAME
+    raise 'Invalid station name' unless name.present?
     true
   end
 

@@ -7,7 +7,6 @@ class CargoTrain < Train
   protected
 
   def validate_coach!(coach)
-    raise "coach_can't be nil" if coach.nil?
     raise 'coach type error' unless coach.instance_of? CargoCoach
   end
 

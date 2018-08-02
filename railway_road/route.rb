@@ -17,7 +17,6 @@ class Route
   end
 
   def remove_station(station)
-    validate_station!(station)
     transition_station_list.delete(station)
   end
 
@@ -44,7 +43,7 @@ class Route
   end
 
   def validate_station!(station)
-    raise "Station can't be nil" if station.nil?
+    raise "The item isn't of type Station" if station.instance_of? Station
     true
   end
 

@@ -7,8 +7,7 @@ class PassengerTrain < Train
   protected
 
   def validate_coach!(coach)
-    raise "coach_can't be nill" if coach.nil?
-    raise 'coach should be of appropriate type' unless coach.instance_of? PassengerCoach
+    raise 'coach type error' unless coach.instance_of? PassengerCoach
   end
 
   def type
