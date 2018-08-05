@@ -109,7 +109,7 @@ class RailwaySystem
   def list_str(list)
     return if list.nil?
     list.map do |item|
-      "#{list.find_index(item)}: #{item}"
+      "#{list.find_index(item) + 1}: #{item}"
     end
   end
 

@@ -19,6 +19,8 @@ class UserMenu
          'английского алфавита и цифры. ' \
          'Пример: las-02'.freeze
 
+  CHOOSE_ZERO_TO_RETURN = '0: Вернуться в предыдущее меню'
+
   def initialize(railway_road)
     @railway_road = railway_road
   end
@@ -26,40 +28,47 @@ class UserMenu
   def create_route
     message = 'Выберите начальную станцию маршрута:'
     stations_str_list = railway_road.stations_str_list
-    station1 = choose_option(message, stations_str_list)
+    menu_choice = choose_option(message, stations_str_list)
+    menu_choice == 0 ? return : station1 = menu_choice - 1
     message = 'Выберите конечную станцию маршрута'
-    station2 = choose_option(message, stations_str_list)
+    menu_choice = choose_option(message, stations_str_list)
+    menu_choice == 0 ? return : station2 = menu_choice - 1
     railway_road.create_route(station1, station2)
   end
 
   def remove_station_in_route
     message = 'Выберите маршрут'
     routes_str_list = railway_road.routes_str_list
-    route = choose_option(message, routes_str_list)
+    menu_choice = choose_option(message, routes_str_list)
+    menu_choice == 0 ? return : route = menu_choice - 1
     message = 'Выберите станцию для удаления'
     stations_str_list = railway_road.show_stations_to_remove(route)
     if stations_str_list.nil?
       puts 'Ошибка, нет промежуточных станций'
       return
     end
-    station = choose_option(message, stations_str_list)
+    menu_choice = choose_option(message, stations_str_list)
+    menu_choice == 0 ? return : station = menu_choice - 1
     railway_road.remove_station_from_route(route, station)
   end
 
   def add_station
     message = 'Выберите маршрут'
     routes_str_list = railway_road.routes_str_list
-    route = choose_option(message, routes_str_list)
+    menu_choice = choose_option(message, routes_str_list)
+    menu_choice == 0 ? return : route = menu_choice - 1
     message = 'Выберите станцию:'
     stations_str_list = railway_road.stations_str_list
-    station = choose_option(message, stations_str_list)
+    menu_choice = choose_option(message, stations_str_list)
+    menu_choice == 0 ? return : station = menu_choice - 1
     railway_road.add_station_to_route(route, station)
   end
 
   def create_train
     message = 'Выберите тип поезда'
     train_types_str_list = railway_road.train_types_str_list
-    train_type = choose_option(message, train_types_str_list)
+    menu_choice = choose_option(message, train_types_str_list)
+    menu_choice == 0 ? return : train_type = menu_choice - 1
     begin
       puts 'Введите номер поезда:'
       train_id = gets.chomp
@@ -77,17 +86,20 @@ class UserMenu
   def assign_route
     message = 'Выберите поезд:'
     trains_str_list = railway_road.trains_str_list
-    train = choose_option(message, trains_str_list)
+    menu_choice = choose_option(message, trains_str_list)
+    menu_choice == 0 ? return : train = menu_choice - 1
     message = 'Выберите маршрут:'
     routes_str_list = railway_road.routes_str_list
-    route = choose_option(message, routes_str_list)
+    menu_choice = choose_option(message, routes_str_list)
+    menu_choice == 0 ? return : route = menu_choice - 1
     railway_road.assign_route_to_train(train, route)
   end
 
   def add_coach
     message = 'Выберите поезд:'
     trains_str_list = railway_road.trains_str_list
-    train = choose_option(message, trains_str_list)
+    menu_choice = choose_option(message, trains_str_list)
+    menu_choice == 0 ? return : train = menu_choice - 1
     # add creation of the coach including volume/passenger selection
     railway_road.add_coach_to_train(train)
   end
@@ -95,7 +107,8 @@ class UserMenu
   def remove_coach
     message = 'Выберите поезд:'
     trains_str_list = railway_road.trains_str_list
-    train = choose_option(message, trains_str_list)
+    menu_choice = choose_option(message, trains_str_list)
+    menu_choice == 0 ? return : train = menu_choice - 1
     railway_road.remove_coach_from_train(train)
   end
 
@@ -113,7 +126,8 @@ class UserMenu
   def show_trains_on_station
     message = 'Выберите станцию:'
     stations_str_list = railway_road.stations_str_list
-    station = choose_option(message, stations_str_list)
+    menu_choice = choose_option(message, stations_str_list)
+    menu_choice == 0 ? return : station = menu_choice - 1
     puts railway_road.show_trains_on_station(station)
   end
 
@@ -123,7 +137,7 @@ class UserMenu
       puts '0: Создать'
       puts '1: Показать список всех станций'
       puts '2: Посмотреть список поездов на станции'
-      puts '3: Выберите этот пункт для возвregister_instanceрата в главное меню'
+      puts '3: Выберите этот пункт для возврата в главное меню'
       puts '4: Выберите этот пункт для выхода'
       choice = gets.to_i
       unless choice.between?(0, 4)
@@ -239,7 +253,8 @@ class UserMenu
   def choose_option(message, string_arr)
     loop do
       puts message
-      threshold = string_arr.size - 1
+      puts CHOOSE_ZERO_TO_RETURN
+      threshold = string_arr.size
       puts string_arr
       choice = gets.to_i
       return choice if choice.between?(0, threshold)
