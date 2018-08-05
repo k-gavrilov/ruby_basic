@@ -95,6 +95,10 @@ class Train
     false
   end
 
+  def each_coach
+    coaches_list.each { |coach| yield(coach) }
+  end
+
   def to_s
     "ID:#{id} Тип:#{type} Кол-во вагонов:#{coaches_num}"
   end

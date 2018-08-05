@@ -88,6 +88,7 @@ class UserMenu
     message = 'Выберите поезд:'
     trains_str_list = railway_road.trains_str_list
     train = choose_option(message, trains_str_list)
+    # add creation of the coach including volume/passenger selection
     railway_road.add_coach_to_train(train)
   end
 
