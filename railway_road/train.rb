@@ -39,9 +39,9 @@ class Train
     coaches_list << coach
   end
 
-  def remove_coach
+  def remove_coach(coach)
     return unless speed.zero?
-    coaches_list.pop
+    coaches_list.delete(coach)
   end
 
   def leave_station(station)

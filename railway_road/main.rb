@@ -8,7 +8,7 @@ require_relative 'passenger_coach.rb'
 require_relative 'cargo_coach.rb'
 require_relative 'railway_system.rb'
 
-# require_relative 'demo.rb'
+require_relative 'demo.rb'
 
 class UserMenu
 
@@ -19,7 +19,7 @@ class UserMenu
          'английского алфавита и цифры. ' \
          'Пример: las-02'.freeze
 
-  CHOOSE_ZERO_TO_RETURN = '0: Вернуться в предыдущее меню'
+  CHOOSE_ZERO_TO_RETURN = '0: Вернуться в предыдущее меню'.freeze
 
   def initialize(railway_road)
     @railway_road = railway_road
@@ -100,8 +100,11 @@ class UserMenu
     trains_str_list = railway_road.trains_str_list
     menu_choice = choose_option(message, trains_str_list)
     menu_choice == 0 ? return : train = menu_choice - 1
-    # add creation of the coach including volume/passenger selection
-    railway_road.add_coach_to_train(train)
+    message = 'Выберите вагон:'
+    coaches = railway_road.coaches_str_list_to_attach(train)
+    menu_choice = choose_option(message, coaches)
+    menu_choice == 0 ? return : coach = menu_choice - 1
+    railway_road.add_coach_to_train(train, coach)
   end
 
   def remove_coach
@@ -109,7 +112,19 @@ class UserMenu
     trains_str_list = railway_road.trains_str_list
     menu_choice = choose_option(message, trains_str_list)
     menu_choice == 0 ? return : train = menu_choice - 1
-    railway_road.remove_coach_from_train(train)
+    message = 'Выберите вагон:'
+    coaches_str_list = railway_road.coaches_in_train_str_list(train)
+    menu_choice == choose_option(message, coaches_str_list)
+    menu_choice == 0 ? return : coach = menu_choice - 1
+    puts railway_road.remove_coach_from_train(train, coach)
+  end
+
+  def show_coaches
+    message = 'Выберите поезд:'
+    trains_str_list = railway_road.trains_str_list
+    menu_choice = choose_option(message, trains_str_list)
+    menu_choice == 0 ? return : train = menu_choice - 1
+    puts railway_road.coaches_in_train_str_list(train)
   end
 
   def create_station
@@ -129,6 +144,52 @@ class UserMenu
     menu_choice = choose_option(message, stations_str_list)
     menu_choice == 0 ? return : station = menu_choice - 1
     puts railway_road.show_trains_on_station(station)
+  end
+
+  def create_coach
+    message = 'Выберите тип вагона'
+    coaches_types_str_list = railway_road.coaches_types_str_list
+    menu_choice = choose_option(message, coaches_types_str_list)
+    menu_choice == 0 ? return : coach_type = menu_choice - 1
+    case coach_type
+    when 0
+      create_cargo_coach
+    when 1
+      create_passenger_coach
+    end
+  end
+
+  def create_cargo_coach
+    puts 'Введите объем вагона:'
+    volume = gets.to_i
+    railway_road.create_cargo_coach(volume)
+  end
+
+  def create_passenger_coach
+    puts 'Введите количество мест'
+    seats_num = gets.to_i
+    railway_road.create_passenger_coach(seats_num)
+  end
+
+  def add_volume
+    # need rescue exceptions
+    message = 'Выберите вагон'
+    cargo_coaches_str_list = railway_road.cargo_coaches_str_list
+    menu_choice = choose_option(message, cargo_coaches_str_list)
+    menu_choice == 0 ? return : coach = menu_choice - 1
+    puts 'Введите занимаемый объем:'
+    volume = gets.to_i
+    puts "Текущее состояние вагона: " \
+         "#{railway_road.occupy_volume_in_coach(coach, volume)}"
+  end
+
+  def add_seat
+    # need rescue exceptions
+    message = 'Выберите вагон'
+    passenger_coaches_str_list = railway_road.passenger_coaches_str_list
+    menu_choice = choose_option(message, passenger_coaches_str_list)
+    menu_choice == 0 ? return : coach = menu_choice - 1
+    puts "Текущее состояние вагона: #{railway_road.occupy_seat_in_coach(coach)}"
   end
 
   def manip_station
@@ -167,12 +228,13 @@ class UserMenu
       puts '1: Назначить маршрут поезду'
       puts '2: Добавить вагон'
       puts '3: Отцепить вагон'
-      puts '4: Выберите этот пункт для возврата в главное меню'
-      puts '5: Выберите этот пункт для выхода'
+      puts '4: Перечислить вагоны'
+      puts '5: Выберите этот пункт для возврата в главное меню'
+      puts '6: Выберите этот пункт для выхода'
 
       choice = gets.to_i
-      unless choice.between?(0, 5)
-        puts 'Некорректный ввод, введите целое число от 0 до 5 включительно'
+      unless choice.between?(0, 6)
+        puts 'Некорректный ввод, введите целое число от 0 до 6 включительно'
         next
       end
 
@@ -186,8 +248,10 @@ class UserMenu
       when 3
         remove_coach
       when 4
-        break
+        show_coaches
       when 5
+        break
+      when 6
         abort
       end
     end
@@ -222,16 +286,46 @@ class UserMenu
     end
   end
 
+  def manip_coach
+    loop do
+      puts 'Выберите действие со вагонами'
+      puts '0: Создать'
+      puts '1: Добавить нагрузку'
+      puts '2: Занять место'
+      puts '3: Выберите этот пункт для возврата в главное меню'
+      puts '4: Выберите этот пункт для выхода'
+      choice = gets.to_i
+      unless choice.between?(0, 4)
+        puts 'Некорректный ввод, введите целое число от 0 до 4 включительно'
+        next
+      end
+
+      case choice
+      when 0
+        create_coach
+      when 1
+        add_volume
+      when 2
+        add_seat
+      when 3
+        break
+      when 4
+        abort
+      end
+    end
+  end
+
   def main_menu
     loop do
       puts 'Выберите с чем Вы хотите работать?'
       puts '0: Станции'
       puts '1: Поезда'
       puts '2: Маршруты'
-      puts '3: Выберите этот пункт для выхода'
+      puts '3: Вагоны'
+      puts '4: Выберите этот пункт для выхода'
       choice = gets.to_i
-      unless choice.between?(0, 3)
-        puts 'Некорректный ввод, введите целое число от 0 до 3 включительно'
+      unless choice.between?(0, 4)
+        puts 'Некорректный ввод, введите целое число от 0 до 4 включительно'
         next
       end
 
@@ -243,6 +337,8 @@ class UserMenu
       when 2
         manip_route
       when 3
+        manip_coach
+      when 4
         break
       end
     end
@@ -266,4 +362,5 @@ class UserMenu
 end
 
 user_menu = UserMenu.new(RailwaySystem.new)
+#user_menu = UserMenu.new(seed)
 user_menu.main_menu

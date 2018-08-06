@@ -1,11 +1,23 @@
 class RailwaySystem
 
   TRAIN_TYPES = [CargoTrain, PassengerTrain]
+  COACH_TYPES = [CargoCoach, PassengerCoach]
+  TRAIN_COACH_MAP = { CargoTrain => CargoCoach,
+                      PassengerTrain => PassengerCoach}
 
   def initialize()
     @stations_list = []
     @trains_list = []
     @routes_list = []
+    @coaches_list = []
+  end
+
+  def create_cargo_coach(volume)
+    coaches_list << CargoCoach.new(volume)
+  end
+
+  def create_passenger_coach(seats_num)
+    coaches_list << PassengerCoach.new(seats_num)
   end
 
   def create_station(station_name)
@@ -44,15 +56,32 @@ class RailwaySystem
     train.route = route
   end
 
-  def add_coach_to_train(train_index)
+  def add_coach_to_train(train_index, coach_index)
     train = trains_list.at(train_index)
-    coach_type = identify_coach_by_train(train)
-    train.add_coach(coach_type.new)
+    coach = appropriate_coaches_by_train(train)[coach_index]
+    coach.attach(train)
   end
 
-  def remove_coach_from_train(train_index)
+  def remove_coach_from_train(train_index, coach_index)
     train = trains_list.at(train_index)
-    train.remove_coach
+    coaches = coaches_list.select { |coach| coach.attached_to == train }
+    coach = coaches.at(coach_index)
+    coach.detach
+    "Вагон #{coach} отцеплен"
+  end
+
+  def occupy_volume_in_coach(coach_index, volume)
+    cargo_coaches = appropriate_coaches_by_type(CargoCoach)
+    coach = cargo_coaches.at(coach_index)
+    coach.occupy_volume(volume)
+    coach.to_s
+  end
+
+  def occupy_seat_in_coach(coach_index)
+    passenger_coaches = appropriate_coaches_by_type(PassengerCoach)
+    coach = passenger_coaches.at(coach_index)
+    coach.occupy_seat
+    coach.to_s
   end
 
   def move_train_forward(train_index)
@@ -77,8 +106,32 @@ class RailwaySystem
     list_str(routes_list)
   end
 
+  def coaches_str_list_to_attach(train_index)
+    coaches = appropriate_coaches_by_train(trains_list.at(train_index))
+    list_str(coaches)
+  end
+
+  def coaches_in_train_str_list(train_index)
+    # debug, some problem with coach selection
+    train = trains_list.at(train_index)
+    coaches = coaches_list.select { |coach| coach.attached_to == train }
+    list_str(coaches)
+  end
+
+  def cargo_coaches_str_list
+    list_str(appropriate_coaches_by_type(CargoCoach))
+  end
+
+  def passenger_coaches_str_list
+    list_str(appropriate_coaches_by_type(PassengerCoach))
+  end
+
   def train_types_str_list
     list_str(TRAIN_TYPES)
+  end
+
+  def coaches_types_str_list
+    list_str(COACH_TYPES)
   end
 
   def show_stations_to_remove(route_index)
@@ -97,13 +150,12 @@ class RailwaySystem
 
   private
 
-  def identify_coach_by_train(train)
-    case train.class.to_s
-    when 'CargoTrain'
-      CargoCoach
-    when 'PassengerTrain'
-      PassengerCoach
-    end
+  def appropriate_coaches_by_train(train)
+    coaches_list.select { |coach| coach.class == TRAIN_COACH_MAP[train.class]}
+  end
+
+  def appropriate_coaches_by_type(coach_type)
+    coaches_list.select { |coach| coach.class == coach_type}
   end
 
   def list_str(list)
@@ -113,16 +165,16 @@ class RailwaySystem
     end
   end
 
-  def identify_list_by_class(class_identifier)
-    case class_identifier.to_s
-    when 'Station'
-      stations_list
-    when 'Train'
-      trains_list
-    when 'Route'
-      routes_list
-    end
-  end
+  # def identify_list_by_class(class_identifier)
+  #   case class_identifier.to_s
+  #   when 'Station'
+  #     stations_list
+  #   when 'Train'
+  #     trains_list
+  #   when 'Route'
+  #     routes_list
+  #   end
+  # end
 
-  attr_reader :stations_list, :trains_list, :routes_list
+  attr_reader :stations_list, :trains_list, :routes_list, :coaches_list
 end

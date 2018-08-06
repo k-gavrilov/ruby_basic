@@ -3,6 +3,7 @@ class CargoCoach < Coach
   attr_reader :occupied_volume
 
   def initialize(volume)
+    super()
     @volume = volume
     @occupied_volume = 0
     validate!
@@ -29,7 +30,7 @@ class CargoCoach < Coach
 
   def to_s
     "#{super.to_s} Свободное место: #{free_volume}" \
-    "Занятое место: #{occupied_volume}"
+    " Занятое место: #{occupied_volume}"
   end
 
   protected

@@ -5,9 +5,21 @@ class Coach
   include Labelable
 
   attr_reader :id
+  attr_reader :attached_to
 
   def initialize
     @id = SecureRandom.uuid()
+  end
+
+  def detach
+    attached_to.remove_coach(self) unless attached_to.nil?
+    self.attached_to = nil
+  end
+
+  def attach(train)
+    detach unless attached_to.nil?
+    self.attached_to = train
+    train.add_coach(self)
   end
 
   def to_s
@@ -17,4 +29,8 @@ class Coach
   def type
     'Вагон'
   end
+
+  protected
+
+  attr_writer :attached_to
 end

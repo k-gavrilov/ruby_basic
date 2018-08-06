@@ -1,6 +1,6 @@
 class CargoTrain < Train
   def add_coach(coach)
-    validate_coach!
+    validate_coach!(coach)
     super(coach)
   end
 
