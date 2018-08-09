@@ -29,7 +29,7 @@ class CargoCoach < Coach
   end
 
   def to_s
-    "#{super.to_s} Свободное место: #{free_volume}" \
+    "#{super} Свободное место: #{free_volume}" \
     " Занятое место: #{occupied_volume}"
   end
 

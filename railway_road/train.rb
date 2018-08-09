@@ -27,7 +27,7 @@ class Train
   end
 
   def raise_speed
-    self.speed = speed + 10
+    self.speed += 10
   end
 
   def brake

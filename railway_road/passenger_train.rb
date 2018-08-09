@@ -8,6 +8,7 @@ class PassengerTrain < Train
 
   def validate_coach!(coach)
     raise 'coach type error' unless coach.instance_of? PassengerCoach
+    true
   end
 
   def type

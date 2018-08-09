@@ -29,10 +29,10 @@ class UserMenu
     message = 'Выберите начальную станцию маршрута:'
     stations_str_list = railway_road.stations_str_list
     menu_choice = choose_option(message, stations_str_list)
-    menu_choice == 0 ? return : station1 = menu_choice - 1
+    menu_choice.zero? ? return : station1 = menu_choice - 1
     message = 'Выберите конечную станцию маршрута'
     menu_choice = choose_option(message, stations_str_list)
-    menu_choice == 0 ? return : station2 = menu_choice - 1
+    menu_choice.zero? ? return : station2 = menu_choice - 1
     railway_road.create_route(station1, station2)
   end
 
@@ -40,7 +40,7 @@ class UserMenu
     message = 'Выберите маршрут'
     routes_str_list = railway_road.routes_str_list
     menu_choice = choose_option(message, routes_str_list)
-    menu_choice == 0 ? return : route = menu_choice - 1
+    menu_choice.zero? ? return : route = menu_choice - 1
     message = 'Выберите станцию для удаления'
     stations_str_list = railway_road.show_stations_to_remove(route)
     if stations_str_list.nil?
@@ -48,7 +48,7 @@ class UserMenu
       return
     end
     menu_choice = choose_option(message, stations_str_list)
-    menu_choice == 0 ? return : station = menu_choice - 1
+    menu_choice.zero? ? return : station = menu_choice - 1
     railway_road.remove_station_from_route(route, station)
   end
 
@@ -56,11 +56,11 @@ class UserMenu
     message = 'Выберите маршрут'
     routes_str_list = railway_road.routes_str_list
     menu_choice = choose_option(message, routes_str_list)
-    menu_choice == 0 ? return : route = menu_choice - 1
+    menu_choice.zero? ? return : route = menu_choice - 1
     message = 'Выберите станцию:'
     stations_str_list = railway_road.stations_str_list
     menu_choice = choose_option(message, stations_str_list)
-    menu_choice == 0 ? return : station = menu_choice - 1
+    menu_choice.zero? ? return : station = menu_choice - 1
     railway_road.add_station_to_route(route, station)
   end
 
@@ -68,7 +68,7 @@ class UserMenu
     message = 'Выберите тип поезда'
     train_types_str_list = railway_road.train_types_str_list
     menu_choice = choose_option(message, train_types_str_list)
-    menu_choice == 0 ? return : train_type = menu_choice - 1
+    menu_choice.zero? ? return : train_type = menu_choice - 1
     begin
       puts 'Введите номер поезда:'
       train_id = gets.chomp
@@ -87,11 +87,11 @@ class UserMenu
     message = 'Выберите поезд:'
     trains_str_list = railway_road.trains_str_list
     menu_choice = choose_option(message, trains_str_list)
-    menu_choice == 0 ? return : train = menu_choice - 1
+    menu_choice.zero? ? return : train = menu_choice - 1
     message = 'Выберите маршрут:'
     routes_str_list = railway_road.routes_str_list
     menu_choice = choose_option(message, routes_str_list)
-    menu_choice == 0 ? return : route = menu_choice - 1
+    menu_choice.zero? ? return : route = menu_choice - 1
     railway_road.assign_route_to_train(train, route)
   end
 
@@ -99,11 +99,11 @@ class UserMenu
     message = 'Выберите поезд:'
     trains_str_list = railway_road.trains_str_list
     menu_choice = choose_option(message, trains_str_list)
-    menu_choice == 0 ? return : train = menu_choice - 1
+    menu_choice.zero? ? return : train = menu_choice - 1
     message = 'Выберите вагон:'
     coaches = railway_road.coaches_str_list_to_attach(train)
     menu_choice = choose_option(message, coaches)
-    menu_choice == 0 ? return : coach = menu_choice - 1
+    menu_choice.zero? ? return : coach = menu_choice - 1
     railway_road.add_coach_to_train(train, coach)
   end
 
@@ -111,11 +111,11 @@ class UserMenu
     message = 'Выберите поезд:'
     trains_str_list = railway_road.trains_str_list
     menu_choice = choose_option(message, trains_str_list)
-    menu_choice == 0 ? return : train = menu_choice - 1
+    menu_choice.zero? ? return : train = menu_choice - 1
     message = 'Выберите вагон:'
     coaches_str_list = railway_road.coaches_in_train_str_list(train)
-    menu_choice == choose_option(message, coaches_str_list)
-    menu_choice == 0 ? return : coach = menu_choice - 1
+    menu_choice = choose_option(message, coaches_str_list)
+    menu_choice.zero? ? return : coach = menu_choice - 1
     puts railway_road.remove_coach_from_train(train, coach)
   end
 
@@ -123,7 +123,7 @@ class UserMenu
     message = 'Выберите поезд:'
     trains_str_list = railway_road.trains_str_list
     menu_choice = choose_option(message, trains_str_list)
-    menu_choice == 0 ? return : train = menu_choice - 1
+    menu_choice.zero? ? return : train = menu_choice - 1
     puts railway_road.coaches_in_train_str_list(train)
   end
 
@@ -142,7 +142,7 @@ class UserMenu
     message = 'Выберите станцию:'
     stations_str_list = railway_road.stations_str_list
     menu_choice = choose_option(message, stations_str_list)
-    menu_choice == 0 ? return : station = menu_choice - 1
+    menu_choice.zero? ? return : station = menu_choice - 1
     puts railway_road.show_trains_on_station(station)
   end
 
@@ -150,7 +150,7 @@ class UserMenu
     message = 'Выберите тип вагона'
     coaches_types_str_list = railway_road.coaches_types_str_list
     menu_choice = choose_option(message, coaches_types_str_list)
-    menu_choice == 0 ? return : coach_type = menu_choice - 1
+    menu_choice.zero? ? return : coach_type = menu_choice - 1
     case coach_type
     when 0
       create_cargo_coach
@@ -176,10 +176,10 @@ class UserMenu
     message = 'Выберите вагон'
     cargo_coaches_str_list = railway_road.cargo_coaches_str_list
     menu_choice = choose_option(message, cargo_coaches_str_list)
-    menu_choice == 0 ? return : coach = menu_choice - 1
+    menu_choice.zero? ? return : coach = menu_choice - 1
     puts 'Введите занимаемый объем:'
     volume = gets.to_i
-    puts "Текущее состояние вагона: " \
+    puts 'Текущее состояние вагона: ' \
          "#{railway_road.occupy_volume_in_coach(coach, volume)}"
   end
 
@@ -188,7 +188,7 @@ class UserMenu
     message = 'Выберите вагон'
     passenger_coaches_str_list = railway_road.passenger_coaches_str_list
     menu_choice = choose_option(message, passenger_coaches_str_list)
-    menu_choice == 0 ? return : coach = menu_choice - 1
+    menu_choice.zero? ? return : coach = menu_choice - 1
     puts "Текущее состояние вагона: #{railway_road.occupy_seat_in_coach(coach)}"
   end
 
@@ -362,5 +362,4 @@ class UserMenu
 end
 
 user_menu = UserMenu.new(RailwaySystem.new)
-#user_menu = UserMenu.new(seed)
 user_menu.main_menu

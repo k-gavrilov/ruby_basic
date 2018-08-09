@@ -8,16 +8,16 @@ class Coach
   attr_reader :attached_to
 
   def initialize
-    @id = SecureRandom.uuid()
+    @id = SecureRandom.uuid
   end
 
   def detach
-    attached_to.remove_coach(self) unless attached_to.nil?
+    attached_to.remove_coach(self) if attached_to
     self.attached_to = nil
   end
 
   def attach(train)
-    detach unless attached_to.nil?
+    detach if attached_to
     self.attached_to = train
     train.add_coach(self)
   end

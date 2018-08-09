@@ -1,11 +1,10 @@
 class RailwaySystem
-
-  TRAIN_TYPES = [CargoTrain, PassengerTrain]
-  COACH_TYPES = [CargoCoach, PassengerCoach]
+  TRAIN_TYPES = [CargoTrain, PassengerTrain].freeze
+  COACH_TYPES = [CargoCoach, PassengerCoach].freeze
   TRAIN_COACH_MAP = { CargoTrain => CargoCoach,
-                      PassengerTrain => PassengerCoach}
+                      PassengerTrain => PassengerCoach }.freeze
 
-  def initialize()
+  def initialize
     @stations_list = []
     @trains_list = []
     @routes_list = []
@@ -107,12 +106,12 @@ class RailwaySystem
   end
 
   def coaches_str_list_to_attach(train_index)
-    coaches = appropriate_coaches_by_train(trains_list.at(train_index))
+    train = trains_list.at(train_index)
+    coaches = appropriate_coaches_by_train(train)
     list_str(coaches)
   end
 
   def coaches_in_train_str_list(train_index)
-    # debug, some problem with coach selection
     train = trains_list.at(train_index)
     coaches = coaches_list.select { |coach| coach.attached_to == train }
     list_str(coaches)
@@ -151,11 +150,11 @@ class RailwaySystem
   private
 
   def appropriate_coaches_by_train(train)
-    coaches_list.select { |coach| coach.class == TRAIN_COACH_MAP[train.class]}
+    coaches_list.select { |coach| coach.class == TRAIN_COACH_MAP[train.class] }
   end
 
   def appropriate_coaches_by_type(coach_type)
-    coaches_list.select { |coach| coach.class == coach_type}
+    coaches_list.select { |coach| coach.class == coach_type }
   end
 
   def list_str(list)
@@ -164,17 +163,6 @@ class RailwaySystem
       "#{list.find_index(item) + 1}: #{item}"
     end
   end
-
-  # def identify_list_by_class(class_identifier)
-  #   case class_identifier.to_s
-  #   when 'Station'
-  #     stations_list
-  #   when 'Train'
-  #     trains_list
-  #   when 'Route'
-  #     routes_list
-  #   end
-  # end
 
   attr_reader :stations_list, :trains_list, :routes_list, :coaches_list
 end

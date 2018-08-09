@@ -29,15 +29,15 @@ class PassengerCoach < Coach
   end
 
   def to_s
-    "#{super.to_s} Свободных мест: #{free_seats_num}" \
+    "#{super} Свободных мест: #{free_seats_num}" \
     " Занятых мест: #{occupied_seats_num}"
   end
 
   protected
 
   def validate!
-    raise "Seats number not an Integer" unless seats_num.instance_of? Integer
-    raise "Negative seats_num" if seats_num < 0
+    raise 'Seats number not an Integer' unless seats_num.instance_of? Integer
+    raise 'Negative seats_num' if seats_num < 0
     true
   end
 

@@ -1,5 +1,4 @@
 module Labelable
-
   attr_reader :manufacturer
 
   MANUFACTURER = /\S+/
