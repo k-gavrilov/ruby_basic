@@ -142,6 +142,5 @@ class UserMenu
   attr_accessor :railway_road
 end
 
-# user_menu = UserMenu.new(RailwaySystem.new)
-user_menu = UserMenu.new(seed)
+user_menu = UserMenu.new(RailwaySystem.new)
 user_menu.start_menu
