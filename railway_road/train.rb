@@ -63,14 +63,18 @@ class Train
     return unless route && route.full_list.at(route_index)
     leave_station(route.full_list[route_index])
     self.route_index = route_index + 1
-    arrive_to_station(route.full_list[route_index])
+    station = route.full_list[route_index]
+    arrive_to_station(station)
+    station
   end
 
   def move_backward
     return unless route && !route_index.zero?
     leave_station(route.full_list[route_index])
     self.route_index = route_index - 1
-    arrive_to_station(route.full_list[route_index])
+    station = route.full_list[route_index]
+    arrive_to_station(station)
+    station
   end
 
   def current_station
