@@ -62,7 +62,7 @@ class UserMenu
   end
 
   def show_trains_on_station(parameters)
-    railway_roadshow_trains_on_station(parameters)
+    railway_road.show_trains_on_station(parameters)
   end
 
   def create_coach(parameters)
