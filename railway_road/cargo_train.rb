@@ -1,4 +1,7 @@
 class CargoTrain < Train
+  validate :id, :presence
+  validate :id, :type, String
+  validate :id, :format, ID
   def add_coach(coach)
     validate_coach!(coach)
     super(coach)

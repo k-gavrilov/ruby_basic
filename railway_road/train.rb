@@ -10,13 +10,11 @@ class Train
   include Validation
 
   ID = /^[a-zа-я0-9]{3}-{0,1}[a-zа-я0-9]{2}$/i
-  REQUIRED_VALIDATIONS = [
-    {obj: :id, val_type: :presence},
-    {obj: :id, val_type: :type, args: String},
-    {obj: :id, val_type: :format, args: ID}
-  ].freeze
 
   attr_reader :id, :speed
+  validate :id, :presence
+  validate :id, :type
+  validate :id, :format, ID
 
   @@trains = {}
 
@@ -106,10 +104,6 @@ class Train
 
   def to_s
     "ID:#{id} Тип:#{type} Кол-во вагонов:#{coaches_num}"
-  end
-
-  def required_validations
-    REQUIRED_VALIDATIONS
   end
 
   protected

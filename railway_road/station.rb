@@ -9,15 +9,13 @@ class Station
   include Accessors
 
   STATION = /\S+/
-  REQUIRED_VALIDATIONS = [
-    {obj: :name, val_type: :presence},
-    {obj: :name, val_type: :type, args: String},
-    {obj: :name, val_type: :format, args: STATION}
-  ].freeze
 
   attr_reader :train_list
   attr_accessor_with_history :name
   strong_attr_accessor :director_name, String
+  validate :name, :presence
+  validate :name, :type, String
+  validate :name, :format, STATION
 
   @@stations = []
 

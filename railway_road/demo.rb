@@ -32,13 +32,11 @@ rescue RuntimeError => e
 end
 
 puts "\nChecking presence of non existing attribute :nonsense:"
-class Train
-  REQUIRED_VALIDATIONS = [
-    {obj: :nonsense, val_type: :presence}
-  ].freeze
+class CargoTrain
+  validate :nonsense, :presence
 end
 begin
-  train4 = Train.new("bbb-bb")
+  train4 = CargoTrain.new("bbb-bb")
 rescue RuntimeError => e
   puts e.message
 end
