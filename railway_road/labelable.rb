@@ -1,7 +1,7 @@
 module Labelable
-  attr_reader :manufacturer
-
   MANUFACTURER = /\S+/
+
+  attr_reader :manufacturer
 
   def manufacturer=(manufacturer)
     validate_manufacturer!

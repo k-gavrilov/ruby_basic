@@ -2,14 +2,21 @@ require_relative 'route.rb'
 require_relative 'station.rb'
 require_relative 'labelable.rb'
 require_relative 'instance_counter.rb'
+require_relative 'validation.rb'
 
 class Train
   include InstanceCounter
   include Labelable
-
-  attr_reader :id, :speed
+  include Validation
 
   ID = /^[a-zа-я0-9]{3}-{0,1}[a-zа-я0-9]{2}$/i
+  REQUIRED_VALIDATIONS = [
+    {obj: :id, val_type: :presence},
+    {obj: :id, val_type: :type, args: String},
+    {obj: :id, val_type: :format, args: ID}
+  ].freeze
+
+  attr_reader :id, :speed
 
   @@trains = {}
 
@@ -93,12 +100,6 @@ class Train
     coaches_list.size
   end
 
-  def valid?
-    validate!
-  rescue RuntimeError
-    false
-  end
-
   def each_coach
     coaches_list.each { |coach| yield(coach) }
   end
@@ -107,13 +108,11 @@ class Train
     "ID:#{id} Тип:#{type} Кол-во вагонов:#{coaches_num}"
   end
 
-  protected
-
-  def validate!
-    raise 'Invalid ID format' unless id.instance_of? String
-    raise 'Invalid train ID' unless id =~ ID
-    true
+  def required_validations
+    REQUIRED_VALIDATIONS
   end
+
+  protected
 
   def type
     'Поезд'
