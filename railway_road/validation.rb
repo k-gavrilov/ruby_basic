@@ -14,17 +14,26 @@ module Validation
       @required_validations
     end
 
-    protected
-
-    def presence(obj)
+    def presence(parameters)
+      instance = parameters[:instance]
+      obj_sym = parameters[:obj]
+      obj = instance.instance_variable_get("@#{obj_sym}".to_sym)
       true if obj
     end
 
-    def format(obj, reg_exp)
+    def format(parameters)
+      instance = parameters[:instance]
+      obj_sym = parameters[:obj]
+      obj = instance.instance_variable_get("@#{obj_sym}".to_sym)
+      reg_exp = parameters[:args][0]
       true if obj =~ reg_exp
     end
 
-    def type(obj, class_name)
+    def type(parameters)
+      instance = parameters[:instance]
+      obj_sym = parameters[:obj]
+      obj = instance.instance_variable_get("@#{obj_sym}".to_sym)
+      class_name = parameters[:args][0]
       true if obj.is_a? class_name
     end
   end
@@ -41,24 +50,12 @@ module Validation
     def validate!
       self.class.required_validations.each do |validation|
         obj_sym = validation[:obj]
-        obj = instance_variable_get("@#{obj_sym}".to_sym)
         val_type = validation[:val_type]
-        args = validation[:args]
-        result = execute_validation(obj, val_type, args)
+        validation[:instance] = self
+        result = self.class.send(val_type, validation)
         raise ":#{obj_sym} #{val_type.to_s.capitalize} error" unless result
       end
       true
-    end
-
-    def execute_validation(obj, val_type, args)
-      case val_type
-      when :presence
-        self.class.send(:presence, obj)
-      when :format
-        self.class.send(:format, obj, args[0])
-      when :type
-        self.class.send(:type, obj, args[0])
-      end
     end
   end
 end

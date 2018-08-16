@@ -13,7 +13,7 @@ class Train
 
   attr_reader :id, :speed
   validate :id, :presence
-  validate :id, :type
+  validate :id, :type, String
   validate :id, :format, ID
 
   @@trains = {}
