@@ -7,34 +7,11 @@ module Validation
   module ClassMethods
     def validate(obj, val_type, *args)
       @required_validations ||= []
-      @required_validations << {obj: obj, val_type: val_type, args: args}
+      @required_validations << {obj: "@#{obj}".to_sym, val_type: val_type, args: args}
     end
 
     def required_validations
       @required_validations
-    end
-
-    def presence(parameters)
-      instance = parameters[:instance]
-      obj_sym = parameters[:obj]
-      obj = instance.instance_variable_get("@#{obj_sym}".to_sym)
-      true if obj
-    end
-
-    def format(parameters)
-      instance = parameters[:instance]
-      obj_sym = parameters[:obj]
-      obj = instance.instance_variable_get("@#{obj_sym}".to_sym)
-      reg_exp = parameters[:args][0]
-      true if obj =~ reg_exp
-    end
-
-    def type(parameters)
-      instance = parameters[:instance]
-      obj_sym = parameters[:obj]
-      obj = instance.instance_variable_get("@#{obj_sym}".to_sym)
-      class_name = parameters[:args][0]
-      true if obj.is_a? class_name
     end
   end
 
@@ -50,12 +27,29 @@ module Validation
     def validate!
       self.class.required_validations.each do |validation|
         obj_sym = validation[:obj]
-        val_type = validation[:val_type]
-        validation[:instance] = self
-        result = self.class.send(val_type, validation)
+        val_type = "validate_#{validation[:val_type]}".to_sym
+        args = validation[:args]
+        result =
+          case val_type
+          when :validate_presence then validate_presence(obj_sym)
+          when :validate_format then validate_format(obj_sym, args[0])
+          when :validate_type then validate_type(obj_sym, args[0])
+          end
         raise ":#{obj_sym} #{val_type.to_s.capitalize} error" unless result
       end
       true
+    end
+
+    def validate_presence(obj_sym)
+      true if instance_variable_get(obj_sym)
+    end
+
+    def validate_format(obj_sym, reg_exp)
+      true if instance_variable_get(obj_sym) =~ reg_exp
+    end
+
+    def validate_type(obj_sym, class_name)
+      true if instance_variable_get(obj_sym).is_a? class_name
     end
   end
 end
